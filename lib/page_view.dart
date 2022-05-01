@@ -24,6 +24,8 @@ class ConcentricPageView extends StatefulWidget {
   final ScrollPhysics? physics;
   final Duration duration;
   final Curve curve;
+  final Widget? nextButtonContent;
+  final Widget? finishButtonContent;
 
   const ConcentricPageView({
     Key? key,
@@ -45,6 +47,8 @@ class ConcentricPageView extends StatefulWidget {
     this.physics,
     this.duration = const Duration(milliseconds: 1500),
     this.curve = Curves.easeOutSine, // Cubic(0.7, 0.5, 0.5, 0.1),
+    this.finishButtonContent,
+    this.nextButtonContent,
   })  : assert(colors.length >= 2),
         super(key: key);
 
@@ -153,38 +157,39 @@ class _ConcentricPageViewState extends State<ConcentricPageView> {
           },
         ),
         StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-          _pageController!.addListener(() {
-            if (_pageController!.page is int) {
-              setState(() {});
-            }
-          });
-      return Positioned(
-        top: MediaQuery.of(context).size.height * widget.verticalPosition,
-          child: TweenAnimationBuilder(
-            key: Key('${_pageController!.page?.floor()}'),
-            tween: Tween<double>(begin: 0.0, end: 1.0),
-            duration: Duration(
-                milliseconds:
-                (widget.duration.inMilliseconds / 2).round()),
-            builder: (BuildContext context, double value, Widget? child) {
-              return Opacity(
-                opacity: value,
-                child: child,
-              );
-            },
-            child: _buildButton(),
-          ));
-      });
+          builder: (BuildContext context, StateSetter setState) {
+            _pageController!.addListener(() {
+              if (_pageController!.page is int) {
+                setState(() {});
+              }
+            });
+            return Positioned(
+                top: MediaQuery.of(context).size.height *
+                    widget.verticalPosition,
+                child: TweenAnimationBuilder(
+                  key: Key('${_pageController!.page?.floor()}'),
+                  tween: Tween<double>(begin: 0.0, end: 1.0),
+                  duration: Duration(
+                      milliseconds:
+                          (widget.duration.inMilliseconds / 2).round()),
+                  builder: (BuildContext context, double value, Widget? child) {
+                    return Opacity(
+                      opacity: value,
+                      child: child,
+                    );
+                  },
+                  child: _buildButton(),
+                ));
+          },
+        ),
       ],
     );
   }
 
   Widget _buildButton() {
+    var isFinal = _pageController!.page == widget.colors.length - 1;
     return RawMaterialButton(
       onPressed: () {
-        boolean isFinal = _pageController!.page == widget.colors.length - 1;
-        
         if (isFinal) {
           if (widget.onFinish != null) {
             widget.onFinish!();
