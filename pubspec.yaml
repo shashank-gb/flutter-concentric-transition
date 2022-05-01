@@ -1,7 +1,7 @@
 name: concentric_transition
 description: Concentric Transition effect. Useful for onboarding, page transitions etc.
 version: 1.0.1
-homepage: 'https://github.com/tiamo/flutter-concentric-transition'
+homepage: 'https://github.com/shashank-gb/flutter-concentric-transition'
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
