@@ -152,24 +152,30 @@ class _ConcentricPageViewState extends State<ConcentricPageView> {
             );
           },
         ),
-        Positioned(
-          top: MediaQuery.of(context).size.height * widget.verticalPosition,
+        StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          _pageController!.addListener(() {
+            if (_pageController!.page is int) {
+              setState(() {});
+            }
+          });
+      return Positioned(
+        top: MediaQuery.of(context).size.height * widget.verticalPosition,
           child: TweenAnimationBuilder(
-                  key: Key('${_pageController!.page?.floor()}'),
-                  tween: Tween<double>(begin: 0.0, end: 1.0),
-                  duration: Duration(
-                      milliseconds:
-                          (widget.duration.inMilliseconds / 2).round()),
-                  builder: (BuildContext context, double value, Widget? child) {
-                    return Opacity(
-                      opacity: value,
-                      child: child,
-                    );
-                  },
-                  child: _buildButton(),
-                ),
-            );
-        ),
+            key: Key('${_pageController!.page?.floor()}'),
+            tween: Tween<double>(begin: 0.0, end: 1.0),
+            duration: Duration(
+                milliseconds:
+                (widget.duration.inMilliseconds / 2).round()),
+            builder: (BuildContext context, double value, Widget? child) {
+              return Opacity(
+                opacity: value,
+                child: child,
+              );
+            },
+            child: _buildButton(),
+          ));
+      });
       ],
     );
   }
