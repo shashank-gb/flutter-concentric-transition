@@ -114,9 +114,6 @@ class _ConcentricPageViewState extends State<ConcentricPageView> {
           },
         ),
         PageView.builder(
-          //          onPageChanged: (page) {
-          //            print('new page $page');
-          //          },
           controller: _pageController,
           reverse: widget.reverse,
           physics: widget.physics,
